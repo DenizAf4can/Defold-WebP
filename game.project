@@ -1,0 +1,8 @@
+[project]
+title = Defold WebP Import
+version = 1.0.0
+
+[library]
+include_dirs = webp_import
+defold_min_version = 1.12.4
+
