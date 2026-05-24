@@ -3,6 +3,5 @@ title = Defold WebP Import
 version = 1.0.0
 
 [library]
-include_dirs = webp_import
+include_dirs = webp_import opacity
 defold_min_version = 1.12.4
-
