@@ -104,7 +104,7 @@ public final class WebPTextureSetUtil {
                     animation.getFlipVertical() != 0));
         }
 
-        for (AtlasImage image : collectedImages) {
+        for (AtlasImage image : atlas.getImagesList()) {
             ExpandedImage expanded = expandAtlasImage(atlasResource, transformer, image, expandedBySourcePath);
             if (expanded.isAnimated()) {
                 String animationId = transformer.transform(image.getImage());
@@ -197,4 +197,3 @@ public final class WebPTextureSetUtil {
         return String.format("%s_%0" + digits + "d", baseId, index + 1);
     }
 }
-
