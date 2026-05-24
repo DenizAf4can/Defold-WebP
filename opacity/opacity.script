@@ -1,0 +1,67 @@
+local opacity = require "opacity.opacity"
+
+go.property("opacity", 1)
+go.property("apply_on_init", true)
+go.property("target_1", msg.url("#sprite"))
+go.property("target_2", msg.url())
+go.property("target_3", msg.url())
+go.property("target_4", msg.url())
+go.property("target_5", msg.url())
+go.property("target_6", msg.url())
+go.property("target_7", msg.url())
+go.property("target_8", msg.url())
+
+local TARGET_KEYS = {
+    "target_1",
+    "target_2",
+    "target_3",
+    "target_4",
+    "target_5",
+    "target_6",
+    "target_7",
+    "target_8",
+}
+
+local function collect_targets(self)
+    local targets = {}
+
+    for _, key in ipairs(TARGET_KEYS) do
+        targets[#targets + 1] = self[key]
+    end
+
+    return targets
+end
+
+local function set_targets(self, targets)
+    self.targets = targets or collect_targets(self)
+end
+
+function init(self)
+    self.opacity = opacity.clamp(self.opacity)
+    set_targets(self)
+
+    if self.apply_on_init then
+        opacity.set_many(self.targets, self.opacity)
+    end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == opacity.MSG_SET then
+        self.opacity = opacity.clamp(message.opacity or message.value or self.opacity)
+        opacity.set_many(self.targets, self.opacity)
+
+    elseif message_id == opacity.MSG_FADE then
+        self.opacity = opacity.clamp(message.opacity or message.to or message.value or self.opacity)
+        opacity.fade_many(self.targets, self.opacity, message.duration, message.easing, message.delay)
+
+    elseif message_id == opacity.MSG_SET_TARGETS then
+        set_targets(self, message.targets or message.components)
+        opacity.set_many(self.targets, self.opacity)
+
+    elseif message_id == opacity.MSG_GET then
+        msg.post(sender, opacity.MSG_OPACITY, {
+            opacity = self.opacity,
+            target_count = #self.targets,
+        })
+    end
+end
