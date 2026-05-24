@@ -35,22 +35,6 @@ defold_min_version = 1.12.4
 - Adds `WebP -> Export Selected WebP Frames` for optional PNG frame export.
 - Uses TwelveMonkeys `imageio-webp` `3.13.1` for editor and bob decoding.
 
-## Install
-
-Add the release archive to `game.project`:
-
-```ini
-[project]
-dependencies#0 = https://github.com/DenizAf4can/Defold-WebP/archive/refs/tags/v.0.2.zip
-```
-
-Then run:
-
-```text
-Project -> Fetch Libraries
-Project -> Reload Editor Scripts
-```
-
 ## Use WebP
 
 Use `.webp` anywhere you would normally pick an image source:
