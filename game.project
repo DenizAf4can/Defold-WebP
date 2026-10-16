@@ -4,4 +4,4 @@ version = 1.0.0
 
 [library]
 include_dirs = webp_import opacity
-defold_min_version = 1.12.4
+defold_min_version = 1.14.0

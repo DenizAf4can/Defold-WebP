@@ -62,7 +62,7 @@ public final class WebPTextureSetUtil {
         }
 
         AtlasUtil.MappedAnimIterator iterator = new AtlasUtil.MappedAnimIterator(animations, expanded.paths);
-        return TextureSetGenerator.generate(expanded.images, expanded.atlasImages, expanded.ids, iterator,
+        return TextureSetGenerator.generate(expanded.images, expanded.atlasImages, expanded.ids, null, iterator,
                 0, 0, 0, true, false, null, 0, 0);
     }
 
@@ -116,7 +116,7 @@ public final class WebPTextureSetUtil {
         }
 
         AtlasUtil.MappedAnimIterator iterator = new AtlasUtil.MappedAnimIterator(animations, imagePaths);
-        return TextureSetGenerator.generate(images, atlasImages, imageNames, iterator,
+        return TextureSetGenerator.generate(images, atlasImages, imageNames, null, iterator,
                 Math.max(0, atlas.getMargin()),
                 Math.max(0, atlas.getInnerPadding()),
                 Math.max(0, atlas.getExtrudeBorders()),

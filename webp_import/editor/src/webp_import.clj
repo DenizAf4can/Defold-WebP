@@ -91,7 +91,7 @@
       (.printStackTrace ^Throwable exception))))
 
 (defn- load-webp-image
-  [project self _resource]
+  [{:keys [project]} {self :node-id}]
   (concat
     (g/connect project :build-settings self :build-settings)
     (g/connect project :texture-profiles self :texture-profiles)))
@@ -207,9 +207,7 @@
 
 (defn- expand-atlas-args
   [args]
-  (-> args
-      (update :animations #(mapv expand-animation %))
-      (update :all-atlas-images #(vec (mapcat expand-webp-image %)))))
+  (update args :animations #(mapv expand-animation %)))
 
 (defn- wrap-atlas-texture-set! []
   (let [atlas->texture-set-data-var #'texture-set-gen/atlas->texture-set-data
@@ -218,10 +216,11 @@
     (when-not (::webp-import-wrapped (meta atlas->texture-set-data-var))
       (alter-var-root atlas->texture-set-data-var
                       (fn [atlas->texture-set-data]
-                        (fn [animations images margin inner-padding extrude-borders max-page-size]
+                        (fn [animations geometry-images layout-images margin inner-padding extrude-borders max-page-size]
                           (let [expanded-animations (mapv expand-animation animations)
-                                expanded-images (vec (mapcat expand-webp-image images))]
-                            (atlas->texture-set-data expanded-animations expanded-images margin inner-padding extrude-borders max-page-size)))))
+                                expanded-geometry-images (vec (mapcat expand-webp-image geometry-images))
+                                expanded-layout-images (vec (mapcat expand-webp-image layout-images))]
+                            (atlas->texture-set-data expanded-animations expanded-geometry-images expanded-layout-images margin inner-padding extrude-borders max-page-size)))))
       (alter-meta! atlas->texture-set-data-var assoc ::webp-import-wrapped true))
     (when-not (::webp-import-wrapped (meta layout-atlas-pages-var))
       (alter-var-root layout-atlas-pages-var
@@ -321,7 +320,7 @@
     :node-type image/ImageNode
     :load-fn load-webp-image
     :stateless? true
-    :view-types [:default]))
+    :view-types [:scene :default]))
 
 (defn- load-plugin [workspace]
   (ensure-webp-imageio!)
